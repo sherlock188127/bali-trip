@@ -113,6 +113,7 @@
   dd{margin:0}
   table{width:100%; border-collapse:collapse; font-size:14px}
   th,td{border-bottom:2px dotted #d8d2c8; padding:6px 4px; text-align:left; vertical-align:top}
+  .chip{display:inline-block; border:2px solid var(--ink); border-radius:6px; padding:0 6px; font-size:12px; line-height:18px; margin:1px 2px}
   .bill{display:inline-block; width:14px; height:14px; border:2px solid var(--ink); border-radius:4px; vertical-align:-2px}
   footer{text-align:center; padding:30px 16px 50px; font-size:14px}
 
@@ -201,7 +202,7 @@
       <div><b id="cd-m">–</b><span>分</span></div>
       <div><b id="cd-s">–</b><span>秒</span></div>
     </div>
-    <p id="countMsg" class="note">距離 10/29 06:30 從永和出門</p>
+    <p id="countMsg" class="note">距離 10/29 07:00 從永和出門</p>
   </div>
 </section>
 
@@ -217,7 +218,7 @@
           <svg class="plane float" viewBox="0 0 64 40" aria-hidden="true"><g transform="translate(64,0) scale(-1,1)"><path d="M4 22 l16 -2 l14 -14 h6 l-6 14 l14 -1 l6 -7 h4 l-3 10 l3 10 h-4 l-6 -7 l-14 -1 l6 14 h-6 l-14 -14 l-16 -2z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></g></svg>
           <div class="city"><b>DPS</b><span>峇里島</span><br><span>16:15 抵達</span></div>
         </div>
-        <p class="note">建議 07:45～08:15 到星宇櫃檯。有資料說冬季班表可能改成 10:10 起飛，以星宇 App 為準。</p>
+        <p class="note">07:00 從永和出門，約 08:00～08:30 到星宇櫃檯。</p>
       </div>
       <div class="card flight back">
         <div class="row"><span class="code">星宇 JX766</span><span class="date">11/1（日）回程</span></div>
@@ -327,16 +328,18 @@
       <div class="card">
         <h3 style="font-size:18px; margin-bottom:8px">小費什麼時候給</h3>
         <table>
-          <tr><th>時候</th><th>給誰</th><th>給幾張</th></tr>
-          <tr><td>10/29 機場</td><td>主動推行李的人</td><td>說 No, thank you</td></tr>
-          <tr><td>10/29 下車</td><td>接機司機</td><td>綠 2 或 藍 1</td></tr>
-          <tr><td>10/29 進房</td><td>行李員</td><td>綠 2 或 藍 1</td></tr>
-          <tr><td>每天早上</td><td>房務（每間）</td><td>綠 1 放枕頭</td></tr>
-          <tr><td>10/30 晚上</td><td>包車司機</td><td>紅 1＋藍 1</td></tr>
-          <tr><td>餐廳</td><td>看帳單</td><td>有 service charge 不用給</td></tr>
-          <tr><td>11/1 退房</td><td>行李員</td><td>綠 2 或 藍 1</td></tr>
-          <tr><td>11/1 機場</td><td>送機司機</td><td>綠 2 或 藍 1</td></tr>
+          <tr><th>什麼時候</th><th>給誰</th><th>給幾張</th></tr>
+          <tr><td>10/29 機場</td><td>主動推行李的人</td><td>不用給，說 No, thank you</td></tr>
+          <tr><td>10/29 到飯店下車</td><td>接機司機</td><td><span class="chip" style="background:#B9DAA5">綠</span>×2 或 <span class="chip" style="background:#A8D3E6">藍</span>×1</td></tr>
+          <tr><td>10/29 行李送到房間</td><td>行李員</td><td><span class="chip" style="background:#B9DAA5">綠</span>×2 或 <span class="chip" style="background:#A8D3E6">藍</span>×1</td></tr>
+          <tr><td>10/30、10/31、11/1 早上出門前</td><td>房務（兩間房各放）</td><td><span class="chip" style="background:#B9DAA5">綠</span>×1 放枕頭上</td></tr>
+          <tr><td>10/30 晚上回飯店下車</td><td>包車司機</td><td><span class="chip" style="background:#F2A497">紅</span>×1＋<span class="chip" style="background:#A8D3E6">藍</span>×1</td></tr>
+          <tr><td>10/30 金巴蘭結帳</td><td>餐廳</td><td>帳單有 service charge 就不用給；沒有給約 10%</td></tr>
+          <tr><td>10/31 浮潛結束</td><td>船家／導遊</td><td><span class="chip" style="background:#B9DAA5">綠</span>×2 或 <span class="chip" style="background:#A8D3E6">藍</span>×1（滿意再給）</td></tr>
+          <tr><td>11/1 退房</td><td>行李員</td><td><span class="chip" style="background:#B9DAA5">綠</span>×2 或 <span class="chip" style="background:#A8D3E6">藍</span>×1</td></tr>
+          <tr><td>11/1 到機場下車</td><td>送機司機</td><td><span class="chip" style="background:#B9DAA5">綠</span>×2 或 <span class="chip" style="background:#A8D3E6">藍</span>×1</td></tr>
         </table>
+        <p class="note">整趟約 IDR 45～55 萬（約 NT$870～1,060）。機場換錢時請櫃台給 <span class="chip" style="background:#B9DAA5">綠</span>×15、<span class="chip" style="background:#A8D3E6">藍</span>×6 左右。</p>
         <p class="note" style="margin-bottom:0">飯店 SPA 價格已含服務費，不用再給。</p>
       </div>
       <div class="card" style="background:var(--coral-soft)">
@@ -365,7 +368,7 @@
 <script>
 (function(){
   /* ---------- 倒數 ---------- */
-  var target = new Date("2026-10-29T06:30:00+08:00").getTime();
+  var target = new Date("2026-10-29T07:00:00+08:00").getTime();
   var end = new Date("2026-11-01T22:05:00+08:00").getTime();
   function tick(){
     var now = Date.now(), diff = target - now;
@@ -403,9 +406,9 @@
   var T = {plane:["plane","✈ 飛機"], car:["car","🚐 包車"], hotelcar:["hotel","🚗 Hyatt 接送"], hy:["car","🚐 和運廂型車"], walk:["walk","🚶 步行"], boat:["boat","⛵ 坐船"], grab:["grab","🚕 Grab"]};
   var DAYS = [
     {title:"10/29（四）出發・抵達峇里島", icon:"plane", items:[
-      {t:"06:30", tag:"hy", title:"永和家裡出發", d:"和運廂型車，帶好護照。"},
-      {t:"07:45", title:"桃園機場第二航廈", d:"星宇櫃檯託運行李。"},
-      {t:"10:45", tag:"plane", title:"JX765 起飛", d:"飛約 5.5 小時，以星宇 App 時間為準。"},
+      {t:"07:00", tag:"hy", title:"永和家裡出發", d:"和運廂型車，帶好護照。"},
+      {t:"08:00", title:"桃園機場第二航廈", d:"約 08:00～08:30 到，星宇櫃檯託運行李。"},
+      {t:"10:45", tag:"plane", title:"JX765 起飛", d:"飛約 5.5 小時。"},
       {t:"16:15", title:"抵達峇里島、入境", d:"4 人排同一櫃檯 → 領行李 → 海關掃 QR code → 機場先換 US$300。", place:"airport"},
       {t:"17:15", tag:"hotelcar", title:"Hyatt 接機到飯店", d:"司機舉 Hyatt 標誌牌。想買水可請司機停便利商店。"},
       {t:"19:00", tag:"walk", title:"飯店晚餐、早點休息", d:"Omang Omang 或海邊 Pizzaria。", place:"hotel"}
@@ -530,9 +533,30 @@
       ["r1","回信給 Hyatt Ricky：Melasti 或 Pandawa、浮潛、放海龜、4 人 SPA、送機選 Innova"],
       ["r2","姐姐自己線上報到，登機證傳給大家"],
       ["r3","買國泰旅平險：爸媽方案 B、我和姐姐方案 A"],
-      ["r4","台銀換美金 US$800（100 元新鈔 8 張）"],
-      ["r5","星宇 App 確認 JX765 起飛時間有沒有改"],
       ["r6","美金分好：我 US$500、姐姐 US$100、保險箱 US$200"]
+    ]},
+    {g:"🧳 行李清單：隨身包", items:[
+      ["k1","護照（每人自己的）"],
+      ["k2","e-VOA、觀光稅憑證、入境申報 QR code（手機＋紙本）"],
+      ["k3","機票、飯店確認單、保險單、英文用藥清單"],
+      ["k4","美金分好、信用卡（Visa／Master 各一張）、現金和卡分開放"],
+      ["k5","常吃的藥多帶 2～3 天份（原包裝）、暈車暈船藥、止瀉腸胃藥、電解質粉"],
+      ["k6","行動電源、GoPro 電池（只能放手提，不能託運）"],
+      ["k7","手機、充電線、轉接頭（印尼是兩圓孔 230V）"],
+      ["k8","薄外套（飛機上冷）、空水壺（過安檢再裝）、濕紙巾、乾洗手"],
+      ["k9","液體 100 毫升以下裝透明夾鏈袋"]
+    ]},
+    {g:"🧳 行李清單：託運行李", items:[
+      ["l1","短袖、透氣衣服 4 天份（當地約 29～32 度）"],
+      ["l2","遮肩膀和膝蓋的薄長褲或長裙（寺廟、正式餐廳）"],
+      ["l3","泳衣、泳褲、快乾小毛巾、裝濕衣服的塑膠袋"],
+      ["l4","好走的鞋、拖鞋或涉水鞋（浮潛、Melasti 海灘）"],
+      ["l5","睡衣、內衣褲、襪子"],
+      ["l6","帽子、太陽眼鏡、防曬乳、防蚊液（含 DEET）"],
+      ["l7","防水手機袋、GoPro 記憶卡多帶一張"],
+      ["l8","輕便雨衣或折傘、OK 繃"],
+      ["l9","牙刷、牙膏、保養品"],
+      ["l10","託運每人 23 公斤、手提 7 公斤，出門前秤重"]
     ]},
     {g:"文件和行李", items:[
       ["d1","護照、e-VOA、觀光稅憑證、入境申報 QR code（存手機＋紙本）"],
