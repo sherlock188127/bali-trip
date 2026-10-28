@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>峇里島家族旅行｜10/29–11/1</title>
+<meta name="description" content="我們全家四人的峇里島四天三夜行程：航班、每日行程、地圖、待辦清單與住宿資訊。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --paper:#FFFCF6; --ink:#3E3A39; --coral:#F2A497; --yellow:#F6D27A; --mizu:#A8D3E6; --green:#B9DAA5;
+    --coral-soft:#FBE3DE; --yellow-soft:#FCF1D2; --mizu-soft:#E3F1F7; --green-soft:#E8F3E1;
+    --line:3px solid var(--ink); --r:22px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; scroll-padding-top:76px}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Huninn",system-ui,sans-serif; font-size:16px; line-height:1.6; -webkit-text-size-adjust:100%}
+  a{color:var(--ink)}
+  h1,h2,h3{margin:0; font-weight:400}
+  .wrap{max-width:760px; margin:0 auto; padding:0 16px}
+
+  /* nav */
+  nav{position:fixed; top:0; left:0; right:0; z-index:1000; background:var(--paper); border-bottom:var(--line)}
+  nav .wrap{display:flex; gap:6px; overflow-x:auto; padding-top:10px; padding-bottom:10px; scrollbar-width:none}
+  nav .wrap::-webkit-scrollbar{display:none}
+  nav a{flex:0 0 auto; text-decoration:none; padding:6px 14px; border:var(--line); border-radius:999px; background:#fff; font-size:15px}
+  nav a:nth-child(5n+1){background:var(--coral-soft)} nav a:nth-child(5n+2){background:var(--yellow-soft)}
+  nav a:nth-child(5n+3){background:var(--mizu-soft)} nav a:nth-child(5n+4){background:var(--green-soft)}
+  main{padding-top:72px}
+
+  section{padding:28px 0}
+  .sec-title{display:flex; align-items:center; gap:10px; font-size:24px; margin-bottom:14px}
+  .sec-title .dot{width:18px; height:18px; border:var(--line); border-radius:50%}
+  .card{background:#fff; border:var(--line); border-radius:var(--r); padding:18px}
+  .note{font-size:14px; opacity:.8}
+
+  /* hero */
+  .hero{text-align:center; padding-top:16px}
+  .hero svg{width:100%; height:auto; display:block; border:var(--line); border-radius:var(--r); background:var(--mizu-soft)}
+  .hero h1{font-size:30px; margin-top:16px; line-height:1.3}
+  .hero .sub{margin:6px 0 14px}
+  .count{display:flex; justify-content:center; gap:10px; flex-wrap:wrap}
+  .count div{min-width:72px; border:var(--line); border-radius:18px; padding:8px 6px; background:var(--yellow)}
+  .count div:nth-child(2){background:var(--coral)} .count div:nth-child(3){background:var(--green)} .count div:nth-child(4){background:var(--mizu)}
+  .count b{display:block; font-size:28px; font-weight:400; line-height:1.1}
+  .count span{font-size:13px}
+  #countMsg{margin-top:10px}
+
+  /* flights */
+  .flights{display:grid; gap:14px}
+  .flight{position:relative; overflow:hidden}
+  .flight .row{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .flight .code{font-size:22px} .flight .date{font-size:14px; border:var(--line); border-radius:999px; padding:2px 12px}
+  .flight .route{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; margin:12px 0 6px; text-align:center}
+  .flight .city b{display:block; font-size:28px; font-weight:400} .flight .city span{font-size:13px}
+  .flight .plane{width:64px}
+  .flight.out{background:var(--mizu-soft)} .flight.back{background:var(--coral-soft)}
+
+  /* days */
+  .tabs{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px}
+  .tab{font-family:inherit; font-size:15px; color:var(--ink); background:#fff; border:var(--line); border-radius:18px; padding:8px 4px; cursor:pointer; line-height:1.3}
+  .tab small{display:block; font-size:12px}
+  .tab[aria-selected="true"]{background:var(--yellow); transform:translateY(-2px)}
+  .day-head{display:flex; gap:12px; align-items:center; margin-bottom:12px}
+  .day-head svg{width:64px; height:64px; flex:0 0 64px}
+  .day-head h3{font-size:20px}
+  .bounce{animation:bounce .55s cubic-bezier(.28,1.6,.5,1)}
+  @keyframes bounce{0%{transform:translateY(16px) scale(.97); opacity:0} 100%{transform:none; opacity:1}}
+  .timeline{list-style:none; margin:0; padding:0 0 0 22px; border-left:3px dashed var(--ink)}
+  .timeline li{position:relative; margin:0 0 14px}
+  .timeline li::before{content:""; position:absolute; left:-33px; top:16px; width:16px; height:16px; border:var(--line); border-radius:50%; background:var(--paper)}
+  .timeline li.must::before{background:var(--coral)}
+  .item{background:#fff; border:var(--line); border-radius:18px; padding:10px 14px}
+  .item .t{font-size:14px; display:flex; flex-wrap:wrap; align-items:center; gap:6px}
+  .item .title{font-size:17px; margin:2px 0}
+  .item p{margin:2px 0; font-size:14px}
+  .tag{display:inline-block; font-size:12px; border:2px solid var(--ink); border-radius:999px; padding:0 8px; line-height:20px}
+  .tag.plane,.tag.boat{background:var(--mizu)} .tag.car{background:var(--yellow)} .tag.hotel{background:var(--green)}
+  .tag.walk{background:var(--coral-soft)} .tag.grab{background:var(--green-soft)}
+  .must-badge{background:var(--coral); border:2px solid var(--ink); border-radius:8px; padding:0 6px; font-size:12px; line-height:20px}
+  .wait{background:var(--yellow-soft); border:2px dashed var(--ink); border-radius:8px; padding:0 6px; font-size:12px; line-height:20px}
+  .maplink{font-size:13px; display:inline-block; margin-top:4px}
+
+  /* map */
+  #map{height:420px; border:var(--line); border-radius:var(--r); z-index:1}
+  .filters{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px}
+  .filters button{font-family:inherit; font-size:14px; color:var(--ink); background:#fff; border:var(--line); border-radius:999px; padding:4px 12px; cursor:pointer}
+  .filters button[aria-pressed="true"]{background:var(--yellow)}
+  .pin{width:26px; height:26px; border:3px solid var(--ink); border-radius:50% 50% 50% 0; transform:rotate(-45deg); display:grid; place-items:center}
+  .pin span{transform:rotate(45deg); font-size:12px; font-family:"Huninn",sans-serif}
+  .leaflet-popup-content{font-family:"Huninn",sans-serif; font-size:14px}
+  .places{list-style:none; padding:0; margin:12px 0 0; display:grid; gap:6px}
+  .places li{display:flex; justify-content:space-between; gap:8px; border-bottom:2px dotted var(--ink); padding:4px 0; font-size:15px}
+
+  /* todo */
+  .todo-group{margin-bottom:14px}
+  .todo-group h3{font-size:17px; margin-bottom:6px}
+  .todo label{display:flex; gap:10px; align-items:flex-start; padding:8px 4px; border-bottom:2px dotted #d8d2c8; cursor:pointer}
+  .todo input{appearance:none; -webkit-appearance:none; flex:0 0 22px; width:22px; height:22px; margin-top:2px; border:var(--line); border-radius:7px; background:#fff; cursor:pointer; display:grid; place-items:center}
+  .todo input:checked{background:var(--green)}
+  .todo input:checked::after{content:"✓"; font-size:15px; line-height:1}
+  .todo input:checked + span{text-decoration:line-through; opacity:.55}
+  .progress{height:16px; border:var(--line); border-radius:999px; overflow:hidden; background:#fff; margin:6px 0 14px}
+  .progress i{display:block; height:100%; background:var(--green); width:0; transition:width .4s}
+
+  /* hotel & info */
+  .grid2{display:grid; gap:14px}
+  dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:15px}
+  dt{opacity:.75}
+  dd{margin:0}
+  table{width:100%; border-collapse:collapse; font-size:14px}
+  th,td{border-bottom:2px dotted #d8d2c8; padding:6px 4px; text-align:left; vertical-align:top}
+  .bill{display:inline-block; width:14px; height:14px; border:2px solid var(--ink); border-radius:4px; vertical-align:-2px}
+  footer{text-align:center; padding:30px 16px 50px; font-size:14px}
+
+  /* animation for illustrations */
+  .float{animation:float 4s ease-in-out infinite}
+  .sway{transform-origin:bottom center; transform-box:fill-box; animation:sway 5s ease-in-out infinite}
+  .sail{animation:sail 7s ease-in-out infinite}
+  .spin{transform-origin:center; transform-box:fill-box; animation:spin 30s linear infinite}
+  .wave{animation:wave 3.5s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-6px)}}
+  @keyframes sway{50%{transform:rotate(3deg)}}
+  @keyframes sail{50%{transform:translateX(14px) translateY(-2px)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes wave{50%{transform:translateX(-10px)}}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none !important; transition:none !important}
+  }
+  @media (min-width:640px){
+    .flights,.grid2{grid-template-columns:1fr 1fr}
+    .hero h1{font-size:36px}
+    #map{height:480px}
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="主選單">
+  <div class="wrap">
+    <a href="#top">首頁</a>
+    <a href="#flights">航班</a>
+    <a href="#days">每日行程</a>
+    <a href="#map-sec">地圖</a>
+    <a href="#todo">待辦</a>
+    <a href="#hotel">住宿</a>
+    <a href="#info">錢與小費</a>
+  </div>
+</nav>
+
+<main>
+<!-- HERO -->
+<section id="top" class="hero">
+  <div class="wrap">
+    <svg viewBox="0 0 360 220" role="img" aria-label="峇里島插圖：太陽、分裂門、椰子樹、海浪與小船">
+      <rect width="360" height="220" fill="#E3F1F7"/>
+      <g class="spin"><circle cx="300" cy="52" r="24" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/>
+        <g stroke="#3E3A39" stroke-width="3" stroke-linecap="round">
+          <line x1="300" y1="14" x2="300" y2="22"/><line x1="300" y1="82" x2="300" y2="90"/>
+          <line x1="262" y1="52" x2="270" y2="52"/><line x1="330" y1="52" x2="338" y2="52"/>
+          <line x1="273" y1="25" x2="279" y2="31"/><line x1="321" y1="73" x2="327" y2="79"/>
+          <line x1="273" y1="79" x2="279" y2="73"/><line x1="321" y1="31" x2="327" y2="25"/></g></g>
+      <g class="float"><path d="M40 50 q10 -14 24 -6 q8 -10 20 -2 q14 0 12 12 h-58 q-8 -2 2 -4z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></g>
+      <g class="float" style="animation-delay:-2s"><path d="M150 34 q8 -10 18 -4 q8 -8 16 0 q10 0 8 9 h-44 q-6 -2 2 -5z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></g>
+      <!-- candi bentar split gate -->
+      <g stroke="#3E3A39" stroke-width="3" stroke-linejoin="round">
+        <path d="M110 150 v-60 l8 -8 v-10 l8 -8 v-10 l8 -8 l8 8 v10 l6 6 v80z" fill="#F2A497"/>
+        <path d="M200 150 v-60 l-8 -8 v-10 l-8 -8 v-10 l-8 -8 l-8 8 v10 l-6 6 v80z" fill="#F2A497"/>
+        <line x1="116" y1="110" x2="146" y2="110"/><line x1="194" y1="110" x2="164" y2="110"/>
+      </g>
+      <!-- palm -->
+      <g class="sway">
+        <path d="M58 158 q6 -40 -2 -78" fill="none" stroke="#3E3A39" stroke-width="6" stroke-linecap="round"/>
+        <path d="M56 80 q-26 -6 -40 10 q22 -4 40 -10z M56 80 q-12 -22 -36 -20 q20 6 36 20z M56 80 q14 -22 38 -16 q-22 2 -38 16z M56 80 q26 2 34 22 q-16 -14 -34 -22z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+      </g>
+      <g class="sway" style="animation-delay:-1.5s">
+        <path d="M250 160 q-4 -32 6 -60" fill="none" stroke="#3E3A39" stroke-width="5" stroke-linecap="round"/>
+        <path d="M256 100 q-22 -8 -34 4 q18 -2 34 -4z M256 100 q-6 -20 -26 -22 q16 8 26 22z M256 100 q14 -18 34 -12 q-18 2 -34 12z M256 100 q20 4 26 20 q-12 -12 -26 -20z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+      </g>
+      <!-- sea -->
+      <rect y="150" width="360" height="70" fill="#A8D3E6"/>
+      <line x1="0" y1="150" x2="360" y2="150" stroke="#3E3A39" stroke-width="3"/>
+      <g class="wave" fill="none" stroke="#3E3A39" stroke-width="3" stroke-linecap="round">
+        <path d="M20 176 q10 -8 20 0 q10 8 20 0"/><path d="M140 196 q10 -8 20 0 q10 8 20 0"/><path d="M280 182 q10 -8 20 0 q10 8 20 0"/></g>
+      <!-- jukung boat -->
+      <g class="sail">
+        <path d="M200 176 h70 q-6 14 -30 14 h-14 q-22 0 -26 -14z" fill="#F6D27A" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M190 186 q45 10 90 0" fill="none" stroke="#3E3A39" stroke-width="3"/>
+        <path d="M232 176 v-40 l26 32z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/>
+      </g>
+    </svg>
+    <h1>峇里島家族旅行</h1>
+    <p class="sub">2026/10/29（四）～ 11/1（日）・四天三夜・爸媽、姐姐和我</p>
+    <div class="count" aria-live="polite">
+      <div><b id="cd-d">–</b><span>天</span></div>
+      <div><b id="cd-h">–</b><span>時</span></div>
+      <div><b id="cd-m">–</b><span>分</span></div>
+      <div><b id="cd-s">–</b><span>秒</span></div>
+    </div>
+    <p id="countMsg" class="note">距離 10/29 06:30 從永和出門</p>
+  </div>
+</section>
+
+<!-- FLIGHTS -->
+<section id="flights">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="dot" style="background:var(--mizu)"></span>航班</h2>
+    <div class="flights">
+      <div class="card flight out">
+        <div class="row"><span class="code">星宇 JX765</span><span class="date">10/29（四）去程</span></div>
+        <div class="route">
+          <div class="city"><b>TPE</b><span>桃園 T2</span><br><span>10:45 起飛</span></div>
+          <svg class="plane float" viewBox="0 0 64 40" aria-hidden="true"><g transform="translate(64,0) scale(-1,1)"><path d="M4 22 l16 -2 l14 -14 h6 l-6 14 l14 -1 l6 -7 h4 l-3 10 l3 10 h-4 l-6 -7 l-14 -1 l6 14 h-6 l-14 -14 l-16 -2z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></g></svg>
+          <div class="city"><b>DPS</b><span>峇里島</span><br><span>16:15 抵達</span></div>
+        </div>
+        <p class="note">建議 07:45～08:15 到星宇櫃檯。有資料說冬季班表可能改成 10:10 起飛，以星宇 App 為準。</p>
+      </div>
+      <div class="card flight back">
+        <div class="row"><span class="code">星宇 JX766</span><span class="date">11/1（日）回程</span></div>
+        <div class="route">
+          <div class="city"><b>DPS</b><span>峇里島</span><br><span>16:40 起飛</span></div>
+          <svg class="plane float" viewBox="0 0 64 40" aria-hidden="true" style="animation-delay:-2s"><g transform="translate(64,0) scale(-1,1)"><path d="M4 22 l16 -2 l14 -14 h6 l-6 14 l14 -1 l6 -7 h4 l-3 10 l3 10 h-4 l-6 -7 l-14 -1 l6 14 h-6 l-14 -14 l-16 -2z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></g></svg>
+          <div class="city"><b>TPE</b><span>桃園 T2</span><br><span>22:05 抵達</span></div>
+        </div>
+        <p class="note">每人託運 23 公斤 1 件、手提 7 公斤 1 件＋1 個小包。行動電源和所有電池放手提。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DAYS -->
+<section id="days">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="dot" style="background:var(--yellow)"></span>每日行程</h2>
+    <div class="tabs" role="tablist" aria-label="選擇日期">
+      <button class="tab" role="tab" data-day="0" aria-selected="true">10/29<small>四・抵達</small></button>
+      <button class="tab" role="tab" data-day="1" aria-selected="false">10/30<small>五・懸崖</small></button>
+      <button class="tab" role="tab" data-day="2" aria-selected="false">10/31<small>六・放鬆</small></button>
+      <button class="tab" role="tab" data-day="3" aria-selected="false">11/1<small>日・回家</small></button>
+    </div>
+    <div id="dayPanel" role="tabpanel"></div>
+    <p class="note">「待確認」是還在等飯店回信的項目。</p>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map-sec">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="dot" style="background:var(--green)"></span>地圖</h2>
+    <div class="filters" role="group" aria-label="篩選日期">
+      <button data-f="all" aria-pressed="true">全部</button>
+      <button data-f="0" aria-pressed="false">10/29</button>
+      <button data-f="1" aria-pressed="false">10/30</button>
+      <button data-f="2" aria-pressed="false">10/31</button>
+      <button data-f="3" aria-pressed="false">11/1</button>
+    </div>
+    <div id="map" aria-label="行程地圖"></div>
+    <p class="note">圖釘位置是大略標示，出發前請點「Google 地圖」連結確認。</p>
+    <ul class="places" id="placeList"></ul>
+  </div>
+</section>
+
+<!-- TODO -->
+<section id="todo">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="dot" style="background:var(--coral)"></span>待辦清單</h2>
+    <div class="card">
+      <div class="note" id="todoCount">完成 0 / 0</div>
+      <div class="progress"><i id="todoBar"></i></div>
+      <div id="todoList"></div>
+      <p class="note">打勾會存在這支手機的瀏覽器裡，換手機或清除瀏覽資料會重來。</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOTEL -->
+<section id="hotel">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="dot" style="background:var(--mizu)"></span>住宿</h2>
+    <div class="grid2">
+      <div class="card" style="background:var(--green-soft)">
+        <h3 style="font-size:20px; margin-bottom:8px">Hyatt Regency Bali</h3>
+        <dl>
+          <dt>入住</dt><dd>10/29（四）傍晚</dd>
+          <dt>退房</dt><dd>11/1（日），已請求延到 12:30（看當天）</dd>
+          <dt>房型</dt><dd>兩間雙人房，含 4 人早餐</dd>
+          <dt>地址</dt><dd>Jalan Danau Tamblingan No. 89, Sanur, Bali 80228</dd>
+          <dt>電話</dt><dd><a href="tel:+62361281234">+62 361 281234</a></dd>
+          <dt>地圖</dt><dd><a href="https://www.google.com/maps/search/?api=1&query=Hyatt+Regency+Bali+Sanur" target="_blank" rel="noopener">Google 地圖</a></dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3 style="font-size:18px; margin-bottom:8px">飯店裡會用到</h3>
+        <dl>
+          <dt>行程客服</dt><dd>WhatsApp <a href="https://wa.me/6281558509829" target="_blank" rel="noopener">+62 815-5850-9829</a><br>dpsbl-guestservice@hyatt.com</dd>
+          <dt>SPA</dt><dd>Shankha Spa，分機 7600<br>WhatsApp <a href="https://wa.me/6281585320959" target="_blank" rel="noopener">+62 815-8532-0959</a></dd>
+          <dt>早餐</dt><dd>Omang Omang 06:30～11:00</dd>
+          <dt>晚餐</dt><dd>Omang Omang、海邊 Pizzaria 18:00～23:00</dd>
+          <dt>接送</dt><dd>司機在機場 Information Centre 附近，舉 <b>Hyatt 標誌牌</b>（不是名字）</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MONEY / INFO -->
+<section id="info">
+  <div class="wrap">
+    <h2 class="sec-title"><span class="dot" style="background:var(--yellow)"></span>錢與小費</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3 style="font-size:18px; margin-bottom:8px">換錢</h3>
+        <p style="margin:0 0 8px">台銀換美金 <b>US$800</b>（100 元新鈔 8 張），到峇里島機場先換 <b>US$300</b>（約 IDR 510 萬，約 NT$9,830）。</p>
+        <p style="margin:0" class="note">快速心算：印尼盾去掉 4 個 0 再乘 2 ≈ 台幣（IDR 50,000 → 約 NT$100）。刷卡選 IDR。</p>
+        <table style="margin-top:10px">
+          <tr><th>鈔票</th><th>面額</th><th>約台幣</th></tr>
+          <tr><td><span class="bill" style="background:#F2A497"></span> 紅</td><td>100,000</td><td>193</td></tr>
+          <tr><td><span class="bill" style="background:#A8D3E6"></span> 藍</td><td>50,000</td><td>97</td></tr>
+          <tr><td><span class="bill" style="background:#B9DAA5"></span> 綠</td><td>20,000</td><td>39</td></tr>
+          <tr><td><span class="bill" style="background:#D9C6E6"></span> 紫</td><td>10,000</td><td>19</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3 style="font-size:18px; margin-bottom:8px">小費什麼時候給</h3>
+        <table>
+          <tr><th>時候</th><th>給誰</th><th>給幾張</th></tr>
+          <tr><td>10/29 機場</td><td>主動推行李的人</td><td>說 No, thank you</td></tr>
+          <tr><td>10/29 下車</td><td>接機司機</td><td>綠 2 或 藍 1</td></tr>
+          <tr><td>10/29 進房</td><td>行李員</td><td>綠 2 或 藍 1</td></tr>
+          <tr><td>每天早上</td><td>房務（每間）</td><td>綠 1 放枕頭</td></tr>
+          <tr><td>10/30 晚上</td><td>包車司機</td><td>紅 1＋藍 1</td></tr>
+          <tr><td>餐廳</td><td>看帳單</td><td>有 service charge 不用給</td></tr>
+          <tr><td>11/1 退房</td><td>行李員</td><td>綠 2 或 藍 1</td></tr>
+          <tr><td>11/1 機場</td><td>送機司機</td><td>綠 2 或 藍 1</td></tr>
+        </table>
+        <p class="note" style="margin-bottom:0">飯店 SPA 價格已含服務費，不用再給。</p>
+      </div>
+      <div class="card" style="background:var(--coral-soft)">
+        <h3 style="font-size:18px; margin-bottom:8px">緊急時</h3>
+        <dl>
+          <dt>印尼緊急電話</dt><dd><a href="tel:112">112</a></dd>
+          <dt>到府醫師</dt><dd>Trishnanda Care Centre<br>WhatsApp <a href="https://wa.me/628973969711" target="_blank" rel="noopener">+62 897-3969-711</a></dd>
+          <dt>國際醫院</dt><dd>BIMC Hospital Kuta <a href="tel:+62361761263">+62 361 761 263</a></dd>
+        </dl>
+      </div>
+      <div class="card" style="background:var(--mizu-soft)">
+        <h3 style="font-size:18px; margin-bottom:8px">吃喝提醒</h3>
+        <p style="margin:0">只喝瓶裝水、飲料說 <b>No ice, please</b>；生菜、生海鮮、半熟蛋先不要吃。進餐廳先問 <b>Can I pay by card?</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg width="90" height="50" viewBox="0 0 90 50" aria-hidden="true" class="float"><ellipse cx="45" cy="30" rx="26" ry="16" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/><circle cx="75" cy="26" r="8" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/><circle cx="78" cy="24" r="1.8" fill="#3E3A39"/><path d="M26 42 l-8 6 M64 42 l8 6 M28 18 l-8 -6 M62 18 l8 -6" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/><path d="M33 22 h24 M30 30 h30 M33 38 h24" stroke="#3E3A39" stroke-width="2" opacity=".5"/></svg>
+  <p>祝我們一路平安、玩得開心 🌺</p>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  /* ---------- 倒數 ---------- */
+  var target = new Date("2026-10-29T06:30:00+08:00").getTime();
+  var end = new Date("2026-11-01T22:05:00+08:00").getTime();
+  function tick(){
+    var now = Date.now(), diff = target - now;
+    var msg = document.getElementById("countMsg");
+    if (diff <= 0){
+      ["cd-d","cd-h","cd-m","cd-s"].forEach(function(id){document.getElementById(id).textContent="0";});
+      msg.textContent = now < end ? "旅行中！好好玩 🌴" : "歡迎回家，辛苦了！";
+      return;
+    }
+    var s = Math.floor(diff/1000);
+    document.getElementById("cd-d").textContent = Math.floor(s/86400);
+    document.getElementById("cd-h").textContent = Math.floor(s%86400/3600);
+    document.getElementById("cd-m").textContent = Math.floor(s%3600/60);
+    document.getElementById("cd-s").textContent = s%60;
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ---------- 地點 ---------- */
+  function g(q){ return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q); }
+  var P = {
+    hotel:   {name:"Hyatt Regency Bali（住宿）", ll:[-8.6922,115.2635], q:"Hyatt Regency Bali Sanur", days:[0,1,2,3]},
+    airport: {name:"峇里島機場 DPS", ll:[-8.7467,115.1668], q:"Ngurah Rai International Airport", days:[0,3]},
+    makbeng: {name:"Warung Mak Beng（炸魚湯老店）", ll:[-8.6755,115.2634], q:"Warung Mak Beng Sanur", days:[1]},
+    melasti: {name:"Melasti 海灘＆懸崖公路", ll:[-8.8486,115.1617], q:"Melasti Beach Ungasan", days:[1]},
+    pandawa: {name:"Pandawa 海灘", ll:[-8.8452,115.1876], q:"Pandawa Beach Bali", days:[1]},
+    menega:  {name:"Menega Cafe（金巴蘭海鮮・日落）", ll:[-8.7856,115.1648], q:"Menega Cafe Jimbaran", days:[1]},
+    snorkel: {name:"Sanur 浮潛（Heavens Corner，Semawang）", ll:[-8.7120,115.2585], q:"Heavens Corner Sanur Semawang", days:[2]},
+    massimo: {name:"Massimo（義大利菜・gelato）", ll:[-8.7050,115.2610], q:"Massimo Italian Restaurant Sanur", days:[2]},
+    costa:   {name:"Costa（海邊地中海餐廳）", ll:[-8.7080,115.2605], q:"COSTA Beach Restaurant Sanur", days:[2]},
+    paed:    {name:"Paed Thai（泰式）", ll:[-8.6880,115.2560], q:"Paed Thai Sanur", days:[2]},
+    icon:    {name:"Icon Bali（商場・伴手禮）", ll:[-8.6960,115.2630], q:"ICON Bali Mall Sanur", days:[2,3]}
+  };
+
+  /* ---------- 每日行程 ---------- */
+  var T = {plane:["plane","✈ 飛機"], car:["car","🚐 包車"], hotelcar:["hotel","🚗 Hyatt 接送"], hy:["car","🚐 和運廂型車"], walk:["walk","🚶 步行"], boat:["boat","⛵ 坐船"], grab:["grab","🚕 Grab"]};
+  var DAYS = [
+    {title:"10/29（四）出發・抵達峇里島", icon:"plane", items:[
+      {t:"06:30", tag:"hy", title:"永和家裡出發", d:"和運廂型車，帶好護照。"},
+      {t:"07:45", title:"桃園機場第二航廈", d:"星宇櫃檯託運行李。"},
+      {t:"10:45", tag:"plane", title:"JX765 起飛", d:"飛約 5.5 小時，以星宇 App 時間為準。"},
+      {t:"16:15", title:"抵達峇里島、入境", d:"4 人排同一櫃檯 → 領行李 → 海關掃 QR code → 機場先換 US$300。", place:"airport"},
+      {t:"17:15", tag:"hotelcar", title:"Hyatt 接機到飯店", d:"司機舉 Hyatt 標誌牌。想買水可請司機停便利商店。"},
+      {t:"19:00", tag:"walk", title:"飯店晚餐、早點休息", d:"Omang Omang 或海邊 Pizzaria。", place:"hotel"}
+    ]},
+    {title:"10/30（五）懸崖公路＋金巴蘭日落", icon:"cliff", items:[
+      {t:"早上", tag:"walk", title:"飯店泳池放鬆", d:"可參加 06:00 日出瑜珈、11:00 水中有氧。", place:"hotel"},
+      {t:"中午", tag:"grab", title:"午餐（可選）Warung Mak Beng", d:"炸魚＋魚頭湯套餐約 IDR 55,000，中午前去人比較少。", place:"makbeng"},
+      {t:"14:00", tag:"car", title:"Hyatt 包車出發", d:"約 7 小時 IDR 1,800,000，含油錢、停車、過路費。"},
+      {t:"15:00", tag:"car", must:true, title:"Melasti 懸崖公路拍照", d:"IG 影片那條兩邊都是峭壁的下坡路。", place:"melasti"},
+      {t:"15:30", tag:"car", wait:true, title:"Melasti 或 Pandawa 海灘放鬆", d:"已請飯店推薦去哪個。Melasti 入場約 IDR 20,000，有廁所、淋浴間。", place:"pandawa"},
+      {t:"17:45", tag:"car", must:true, title:"金巴蘭海灘看日落", d:"日落 18:15，天黑約 18:36。"},
+      {t:"18:00", wait:true, title:"Menega Cafe 沙灘海鮮", d:"飯店幫訂 4 人 17:45，等餐廳確認。結帳前確認重量和總價。", place:"menega"},
+      {t:"20:45", tag:"car", title:"回到飯店", d:"司機小費：紅 1＋藍 1。"}
+    ]},
+    {title:"10/31（六）Sanur 海邊放鬆日", icon:"turtle", items:[
+      {t:"早上", tag:"boat", must:true, wait:true, title:"Sanur 外海坐船浮潛", d:"已請飯店安排，例如 Heavens Corner（約 1.5 小時）。前一天看海況。", place:"snorkel"},
+      {t:"待定", tag:"walk", wait:true, title:"放小海龜 2 隻", d:"飯店 Sea Turtle Village，每隻捐 IDR 150,000，看當天有沒有小海龜。", place:"hotel"},
+      {t:"中午", tag:"walk", title:"午餐 Massimo＋gelato", d:"沿海濱步道散步過去。", place:"massimo"},
+      {t:"下午", tag:"walk", title:"飯店休息、游泳、海濱步道", d:"想逛街可以走到 Icon Bali。", place:"icon"},
+      {t:"傍晚", tag:"grab", title:"晚餐 Paed Thai 或 Costa", d:"Paed Thai 要叫車；Costa 在海邊，要先訂位。", place:"paed"},
+      {t:"晚上", tag:"walk", must:true, wait:true, title:"4 人 SPA", d:"Signature Balinese 60 分鐘，每人 IDR 130 萬（已含服務費和稅）。爸媽力道輕～中。", place:"hotel"}
+    ]},
+    {title:"11/1（日）伴手禮・回家", icon:"gift", items:[
+      {t:"早上", tag:"walk", title:"看日出、吃早餐", d:"最後一次在海邊散步。", place:"hotel"},
+      {t:"09:30", tag:"walk", title:"Icon Bali 買伴手禮", d:"走路約 5～15 分鐘。", place:"icon"},
+      {t:"11:30", title:"退房、吃早一點的午餐", d:"已請求延到 12:30 退房（看當天）。行李員小費：綠 2 或藍 1。"},
+      {t:"12:30", tag:"hotelcar", wait:true, title:"Hyatt 送機", d:"已回信選 Innova（IDR 500,000），等確認。", place:"airport"},
+      {t:"16:40", tag:"plane", title:"JX766 起飛", d:"22:05 抵達桃園第二航廈。"},
+      {t:"22:05", tag:"hy", title:"和運接機回永和", d:"司機從實際抵達時間開始等。"}
+    ]}
+  ];
+
+  var ICONS = {
+    plane:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="#E3F1F7" stroke="#3E3A39" stroke-width="3"/><g class="float"><path d="M12 34 l12 -2 l10 -12 h5 l-4 12 l10 -1 l4 -5 h3 l-2 7 l2 7 h-3 l-4 -5 l-10 -1 l4 12 h-5 l-10 -12 l-12 -2z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></g></svg>',
+    cliff:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="#FCF1D2" stroke="#3E3A39" stroke-width="3"/><circle class="float" cx="42" cy="22" r="7" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/><path d="M6 40 h52 v6 q-26 14 -52 0z" fill="#A8D3E6" stroke="#3E3A39" stroke-width="3"/><path d="M8 44 v-26 l10 -4 l6 30z" fill="#F6D27A" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></svg>',
+    turtle:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="#E8F3E1" stroke="#3E3A39" stroke-width="3"/><g class="float"><ellipse cx="30" cy="34" rx="14" ry="10" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/><circle cx="47" cy="31" r="5" fill="#B9DAA5" stroke="#3E3A39" stroke-width="3"/><circle cx="48.5" cy="30" r="1.2" fill="#3E3A39"/><path d="M20 42 l-4 5 M38 42 l4 5 M20 26 l-4 -5 M38 26 l4 -5" stroke="#3E3A39" stroke-width="3" stroke-linecap="round"/></g></svg>',
+    gift:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="#FBE3DE" stroke="#3E3A39" stroke-width="3"/><g class="float"><rect x="18" y="28" width="28" height="20" rx="3" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/><rect x="15" y="22" width="34" height="8" rx="3" fill="#F6D27A" stroke="#3E3A39" stroke-width="3"/><path d="M32 22 v26" stroke="#3E3A39" stroke-width="3"/><path d="M32 22 q-10 -10 -10 -2 q0 4 10 2 q10 2 10 -2 q0 -8 -10 2z" fill="#fff" stroke="#3E3A39" stroke-width="3" stroke-linejoin="round"/></g></svg>'
+  };
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+  var panel = document.getElementById("dayPanel");
+  function renderDay(i){
+    var day = DAYS[i];
+    var html = '<div class="day-head">' + ICONS[day.icon] + '<h3>' + esc(day.title) + '</h3></div><ol class="timeline">';
+    day.items.forEach(function(it){
+      var tag = it.tag ? '<span class="tag ' + T[it.tag][0] + '">' + T[it.tag][1] + '</span>' : '';
+      var badges = (it.must ? '<span class="must-badge">必去</span>' : '') + (it.wait ? '<span class="wait">待確認</span>' : '');
+      var link = it.place ? '<a class="maplink" href="' + g(P[it.place].q) + '" target="_blank" rel="noopener">📍 Google 地圖</a>' : '';
+      html += '<li class="' + (it.must ? 'must' : '') + '"><div class="item"><div class="t">' + esc(it.t) + ' ' + tag + badges + '</div>'
+           + '<div class="title">' + esc(it.title) + '</div><p>' + esc(it.d) + '</p>' + link + '</div></li>';
+    });
+    panel.innerHTML = html + '</ol>';
+    panel.classList.remove("bounce"); void panel.offsetWidth; panel.classList.add("bounce");
+  }
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+  tabs.forEach(function(b){
+    b.addEventListener("click", function(){
+      tabs.forEach(function(x){x.setAttribute("aria-selected","false");});
+      b.setAttribute("aria-selected","true");
+      renderDay(+b.dataset.day);
+    });
+  });
+  // 旅行期間自動跳到當天
+  var startDay = 0, now = new Date();
+  var ymd = now.getFullYear()*10000 + (now.getMonth()+1)*100 + now.getDate();
+  if (ymd === 20261030) startDay = 1; else if (ymd === 20261031) startDay = 2; else if (ymd === 20261101) startDay = 3;
+  tabs.forEach(function(x,k){x.setAttribute("aria-selected", k===startDay ? "true" : "false");});
+  renderDay(startDay);
+
+  /* ---------- 地圖 ---------- */
+  var COLORS = ["#A8D3E6","#F6D27A","#B9DAA5","#F2A497"];
+  var list = document.getElementById("placeList");
+  var keys = Object.keys(P);
+  keys.forEach(function(k){
+    var p = P[k];
+    var li = document.createElement("li");
+    li.dataset.days = p.days.join(",");
+    li.innerHTML = '<span>' + esc(p.name) + '</span><a href="' + g(p.q) + '" target="_blank" rel="noopener">Google 地圖</a>';
+    list.appendChild(li);
+  });
+
+  var markers = [];
+  var map = null;
+  if (window.L){
+    map = L.map("map", {scrollWheelZoom:false}).setView([-8.75,115.21], 11);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom:18, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    keys.forEach(function(k){
+      var p = P[k];
+      var color = k === "hotel" ? "#F2A497" : COLORS[p.days[0]];
+      var label = k === "hotel" ? "住" : String(p.days[0] === 0 ? 29 : p.days[0] === 1 ? 30 : p.days[0] === 2 ? 31 : 1);
+      var icon = L.divIcon({className:"", html:'<div class="pin" style="background:' + color + '"><span>' + label + '</span></div>', iconSize:[26,26], iconAnchor:[13,26], popupAnchor:[0,-24]});
+      var m = L.marker(p.ll, {icon:icon}).bindPopup('<b>' + esc(p.name) + '</b><br><a href="' + g(p.q) + '" target="_blank" rel="noopener">在 Google 地圖打開</a>');
+      m._days = p.days; m.addTo(map); markers.push(m);
+    });
+  } else {
+    document.getElementById("map").innerHTML = '<p style="padding:16px">地圖載入失敗，請用下面的 Google 地圖連結。</p>';
+  }
+
+  var fbtns = Array.prototype.slice.call(document.querySelectorAll(".filters button"));
+  fbtns.forEach(function(b){
+    b.addEventListener("click", function(){
+      fbtns.forEach(function(x){x.setAttribute("aria-pressed","false");});
+      b.setAttribute("aria-pressed","true");
+      var f = b.dataset.f, shown = [];
+      markers.forEach(function(m){
+        var on = f === "all" || m._days.indexOf(+f) > -1;
+        if (on){ m.addTo(map); shown.push(m.getLatLng()); } else { map.removeLayer(m); }
+      });
+      Array.prototype.forEach.call(list.children, function(li){
+        li.style.display = (f === "all" || li.dataset.days.split(",").indexOf(f) > -1) ? "" : "none";
+      });
+      if (map && shown.length){ map.fitBounds(L.latLngBounds(shown).pad(0.25), {maxZoom:14}); }
+    });
+  });
+
+  /* ---------- 待辦清單 ---------- */
+  var TODO = [
+    {g:"出發前（10/28）", items:[
+      ["r1","回信給 Hyatt Ricky：Melasti 或 Pandawa、浮潛、放海龜、4 人 SPA、送機選 Innova"],
+      ["r2","姐姐自己線上報到，登機證傳給大家"],
+      ["r3","買國泰旅平險：爸媽方案 B、我和姐姐方案 A"],
+      ["r4","台銀換美金 US$800（100 元新鈔 8 張）"],
+      ["r5","星宇 App 確認 JX765 起飛時間有沒有改"],
+      ["r6","美金分好：我 US$500、姐姐 US$100、保險箱 US$200"]
+    ]},
+    {g:"文件和行李", items:[
+      ["d1","護照、e-VOA、觀光稅憑證、入境申報 QR code（存手機＋紙本）"],
+      ["d2","飯店確認單、保險單、英文用藥清單"],
+      ["d3","託運每人 23 公斤、手提 7 公斤"],
+      ["d4","行動電源充飽、放手提（每人最多 2 個）"],
+      ["d5","液體每罐 100 毫升以下、裝透明夾鏈袋；藥放手提"],
+      ["d6","實體信用卡要帶（入住押金），現金和卡分開放"]
+    ]},
+    {g:"幫爸媽準備", items:[
+      ["p1","裝 WhatsApp，存好家人和飯店號碼"],
+      ["p2","Google 翻譯下載中文、英文、印尼文離線包"],
+      ["p3","4 人 eSIM"],
+      ["p4","平常吃的藥多帶 2～3 天份"],
+      ["p5","打給銀行確認卡片能在國外刷"],
+      ["p6","印出緊急聯絡頁和飯店地址卡"]
+    ]},
+    {g:"到了峇里島", items:[
+      ["b1","機場換 US$300，請櫃台給綠色和藍色小鈔"],
+      ["b2","爸媽各分 IDR 50 萬、姐姐 IDR 100 萬"],
+      ["b3","入住時問：電梯、保險箱放不放得下筆電"],
+      ["b4","10/30 前一天確認 Menega Cafe 訂位"],
+      ["b5","10/31 浮潛前一天看海況"]
+    ]}
+  ];
+  var KEY = "bali-trip-todo-v1", saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e){ saved = {}; }
+  var tl = document.getElementById("todoList"), total = 0;
+  TODO.forEach(function(grp){
+    var div = document.createElement("div"); div.className = "todo-group todo";
+    var h = '<h3>' + esc(grp.g) + '</h3>';
+    grp.items.forEach(function(it){
+      total++;
+      h += '<label><input type="checkbox" data-id="' + it[0] + '"' + (saved[it[0]] ? ' checked' : '') + '><span>' + esc(it[1]) + '</span></label>';
+    });
+    div.innerHTML = h; tl.appendChild(div);
+  });
+  function updateCount(){
+    var done = tl.querySelectorAll("input:checked").length;
+    document.getElementById("todoCount").textContent = "完成 " + done + " / " + total;
+    document.getElementById("todoBar").style.width = (total ? done/total*100 : 0) + "%";
+  }
+  tl.addEventListener("change", function(e){
+    if (e.target.dataset.id){
+      saved[e.target.dataset.id] = e.target.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(err){}
+      updateCount();
+    }
+  });
+  updateCount();
+})();
+</script>
+</body>
+</html>
