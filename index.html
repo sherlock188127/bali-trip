@@ -287,7 +287,7 @@
         <h3 style="font-size:20px; margin-bottom:8px">Hyatt Regency Bali</h3>
         <dl>
           <dt>入住</dt><dd>10/29（四）傍晚</dd>
-          <dt>退房</dt><dd>11/1（日），已請求延到 12:30（看當天）</dd>
+          <dt>退房</dt><dd>11/1（日）09:30 先退房，行李寄放行李櫃台，12:30 送機</dd>
           <dt>房型</dt><dd>兩間雙人房，含 4 人早餐</dd>
           <dt>地址</dt><dd>Jalan Danau Tamblingan No. 89, Sanur, Bali 80228</dd>
           <dt>電話</dt><dd><a href="tel:+62361281234">+62 361 281234</a></dd>
@@ -392,14 +392,14 @@
   var P = {
     hotel:   {name:"Hyatt Regency Bali（住宿）", ll:[-8.6922,115.2635], q:"Hyatt Regency Bali Sanur", days:[0,1,2,3]},
     airport: {name:"峇里島機場 DPS", ll:[-8.7467,115.1668], q:"Ngurah Rai International Airport", days:[0,3]},
-    makbeng: {name:"Warung Mak Beng（炸魚湯老店）", ll:[-8.6755,115.2634], q:"Warung Mak Beng Sanur", days:[1]},
     melasti: {name:"Melasti 海灘＆懸崖公路", ll:[-8.8486,115.1617], q:"Melasti Beach Ungasan", days:[1]},
     pandawa: {name:"Pandawa 海灘", ll:[-8.8452,115.1876], q:"Pandawa Beach Bali", days:[1]},
     menega:  {name:"Menega Cafe（金巴蘭海鮮・日落）", ll:[-8.7856,115.1648], q:"Menega Cafe Jimbaran", days:[1]},
     snorkel: {name:"Sanur 浮潛（Heavens Corner，Semawang）", ll:[-8.7120,115.2585], q:"Heavens Corner Sanur Semawang", days:[2]},
     massimo: {name:"Massimo（義大利菜・gelato）", ll:[-8.7050,115.2610], q:"Massimo Italian Restaurant Sanur", days:[2]},
-    costa:   {name:"Costa（海邊地中海餐廳）", ll:[-8.7080,115.2605], q:"COSTA Beach Restaurant Sanur", days:[2]},
-    paed:    {name:"Paed Thai（泰式）", ll:[-8.6880,115.2560], q:"Paed Thai Sanur", days:[2]},
+    costa:   {name:"Costa（10/31 晚餐・海邊地中海餐廳）", ll:[-8.7080,115.2605], q:"COSTA Beach Restaurant Sanur", days:[2]},
+    paed:    {name:"Paed Thai（10/30 午餐・泰式）", ll:[-8.6880,115.2560], q:"Paed Thai Sanur", days:[1]},
+    kaluma:  {name:"Kaluma（11/1 午餐）", ll:[-8.6955,115.2622], q:"Kaluma Casual Dining Bar Sanur", days:[3]},
     icon:    {name:"Icon Bali（商場・伴手禮）", ll:[-8.6960,115.2630], q:"ICON Bali Mall Sanur", days:[2,3]}
   };
 
@@ -416,27 +416,30 @@
     ]},
     {title:"10/30（五）懸崖公路＋金巴蘭日落", icon:"cliff", items:[
       {t:"早上", tag:"walk", title:"飯店泳池放鬆", d:"可參加 06:00 日出瑜珈、11:00 水中有氧。", place:"hotel"},
-      {t:"中午", tag:"grab", title:"午餐（可選）Warung Mak Beng", d:"炸魚＋魚頭湯套餐約 IDR 55,000，中午前去人比較少。", place:"makbeng"},
-      {t:"14:00", tag:"car", title:"Hyatt 包車出發", d:"約 7 小時 IDR 1,800,000，含油錢、停車、過路費。"},
-      {t:"15:00", tag:"car", must:true, title:"Melasti 懸崖公路拍照", d:"IG 影片那條兩邊都是峭壁的下坡路。", place:"melasti"},
-      {t:"15:30", tag:"car", wait:true, title:"Melasti 或 Pandawa 海灘放鬆", d:"已請飯店推薦去哪個。Melasti 入場約 IDR 20,000，有廁所、淋浴間。", place:"pandawa"},
-      {t:"17:45", tag:"car", must:true, title:"金巴蘭海灘看日落", d:"日落 18:15，天黑約 18:36。"},
-      {t:"18:00", wait:true, title:"Menega Cafe 沙灘海鮮", d:"飯店幫訂 4 人 17:45，等餐廳確認。結帳前確認重量和總價。", place:"menega"},
-      {t:"20:45", tag:"car", title:"回到飯店", d:"司機小費：紅 1＋藍 1。"}
+      {t:"11:45", tag:"walk", title:"走路去 Paed Thai", d:"沿 Jl. Danau Tamblingan 轉 Jl. Kesari，約 1.3 公里、17 分鐘；中午很熱，戴帽子、帶水。", place:"paed"},
+      {t:"12:00", tag:"walk", wait:true, title:"午餐 Paed Thai（泰式）", d:"已請飯店訂 4 人 12:00，等確認。怕辣跟店員說 Not spicy。熱的話請餐廳叫車回飯店。", place:"paed"},
+      {t:"13:30", title:"回到飯店休息", d:"上廁所、拿防曬和毛巾。", place:"hotel"},
+      {t:"14:00", tag:"car", title:"Hyatt 包車出發", d:"約 7 小時 IDR 1,800,000（約 NT$3,920），記房帳；含油錢、停車、過路費。"},
+      {t:"15:00", tag:"car", must:true, title:"Melasti 懸崖公路＋海灘", d:"IG 影片那條兩邊都是峭壁的路，15:00～15:45 拍照、在海邊放鬆。入場約 IDR 20,000。", place:"melasti"},
+      {t:"16:05", tag:"car", title:"Pandawa 海灘", d:"16:05～16:45。兩個海灘只差 20 分鐘，當天跟司機決定兩個都去，或只待一個。", place:"pandawa"},
+      {t:"17:30", tag:"car", must:true, wait:true, title:"金巴蘭 Menega Cafe 海鮮＋日落", d:"飯店已幫忙提出訂位。日落 18:15。自己挑海鮮秤重，結帳前確認重量和總價。", place:"menega"},
+      {t:"20:30", tag:"car", title:"回到飯店", d:"約 20:15～20:45。司機小費：紅 1＋藍 1。"}
     ]},
     {title:"10/31（六）Sanur 海邊放鬆日", icon:"turtle", items:[
-      {t:"早上", tag:"boat", must:true, wait:true, title:"Sanur 外海坐船浮潛", d:"已請飯店安排，例如 Heavens Corner（約 1.5 小時）。前一天看海況。", place:"snorkel"},
+      {t:"早上", tag:"boat", must:true, wait:true, title:"Heaven's Corner 坐船浮潛（4 人）", d:"每人 IDR 300,000（約 NT$580），約 1.5 小時，Semawang 海灘集合；含船、裝備、礦泉水、魚飼料、GoPro 拍照錄影。已請飯店訂，等回覆時間和壞天氣怎麼處理。", place:"snorkel"},
       {t:"待定", tag:"walk", wait:true, title:"放小海龜 2 隻", d:"飯店 Sea Turtle Village，每隻捐 IDR 150,000，看當天有沒有小海龜。", place:"hotel"},
-      {t:"中午", tag:"walk", title:"午餐 Massimo＋gelato", d:"沿海濱步道散步過去。", place:"massimo"},
+      {t:"中午", tag:"walk", wait:true, title:"午餐還沒定：Massimo 或飯店", d:"Massimo 沿海濱步道走過去，吃完吃 gelato；不用訂位。", place:"massimo"},
       {t:"下午", tag:"walk", title:"飯店休息、游泳、海濱步道", d:"想逛街可以走到 Icon Bali。", place:"icon"},
-      {t:"傍晚", tag:"grab", title:"晚餐 Paed Thai 或 Costa", d:"Paed Thai 要叫車；Costa 在海邊，要先訂位。", place:"paed"},
-      {t:"晚上", tag:"walk", must:true, wait:true, title:"4 人 SPA", d:"Signature Balinese 60 分鐘，每人 IDR 130 萬（已含服務費和稅）。爸媽力道輕～中。", place:"hotel"}
+      {t:"18:00", tag:"grab", title:"晚餐 Costa（海邊地中海餐廳）", d:"已請飯店訂 4 人 18:00，等確認。在飯店南邊約 2 公里，請櫃台叫車 5～10 分鐘。", place:"costa", wait:true},
+      {t:"待定", tag:"walk", must:true, wait:true, title:"4 人 SPA", d:"Signature Balinese 60 分鐘，每人 IDR 130 萬（已含服務費和稅）。已請飯店跟晚餐錯開，等回覆時間。爸媽力道輕～中。", place:"hotel"}
     ]},
     {title:"11/1（日）伴手禮・回家", icon:"gift", items:[
       {t:"早上", tag:"walk", title:"看日出、吃早餐", d:"最後一次在海邊散步。", place:"hotel"},
-      {t:"09:30", tag:"walk", title:"Icon Bali 買伴手禮", d:"走路約 5～15 分鐘。", place:"icon"},
-      {t:"11:30", title:"退房、吃早一點的午餐", d:"已請求延到 12:30 退房（看當天）。行李員小費：綠 2 或藍 1。"},
-      {t:"12:30", tag:"hotelcar", wait:true, title:"Hyatt 送機", d:"已回信選 Innova（IDR 500,000），等確認。", place:"airport"},
+      {t:"09:30", title:"先退房、行李寄放", d:"行李交給行李櫃台（bell desk），12:00 回來拿。", place:"hotel"},
+      {t:"09:45", tag:"walk", title:"Icon Bali 買伴手禮", d:"走路約 5～15 分鐘，逛到 10:45。", place:"icon"},
+      {t:"10:45", tag:"walk", title:"午餐 Kaluma", d:"已請飯店訂 4 人 10:45，等確認。就在 Icon Bali 對面，有冷氣、可刷卡；點出菜快的，11:45 前吃完。", place:"kaluma", wait:true},
+      {t:"12:00", title:"回飯店拿行李、上廁所", d:"行李員小費：綠 2 或藍 1。", place:"hotel"},
+      {t:"12:30", tag:"hotelcar", title:"Hyatt 送機", d:"✅ 已確認：Innova IDR 500,000，記房帳。司機小費：綠 2 或藍 1。", place:"airport"},
       {t:"16:40", tag:"plane", title:"JX766 起飛", d:"22:05 抵達桃園第二航廈。"},
       {t:"22:05", tag:"hy", title:"和運接機回永和", d:"司機從實際抵達時間開始等。"}
     ]}
@@ -530,11 +533,10 @@
 
   /* ---------- 待辦清單 ---------- */
   var TODO = [
-    {g:"出發前（10/28）", items:[
-      ["r1","回信給 Hyatt Ricky：Melasti 或 Pandawa、浮潛、放海龜、4 人 SPA、送機選 Innova"],
-      ["r2","姐姐自己線上報到，登機證傳給大家"],
-      ["r3","買國泰旅平險：爸媽方案 B、我和姐姐方案 A"],
-      ["r6","美金分好：4 人各 US$50，爸媽再各加 US$100；我另拿 US$300 到機場換；保險箱 US$100"]
+    {g:"等飯店回信", items:[
+      ["w1","浮潛幾點出發、天氣不好怎麼處理"],
+      ["w2","放海龜時間、SPA 時間"],
+      ["w3","Paed Thai（10/30 12:00）、Costa（10/31 18:00）、Kaluma（11/1 10:45）訂位"]
     ]},
     {g:"🧳 行李清單：隨身包", items:[
       ["k1","護照（每人自己的）"],
@@ -570,7 +572,7 @@
     {g:"幫爸媽準備", items:[
       ["p1","裝 WhatsApp，存好家人和飯店號碼"],
       ["p2","Google 翻譯下載中文、英文、印尼文離線包"],
-      ["p3","4 人 eSIM"],
+      ["p3","4 人網路：eSIM 或 SIM 卡"],
       ["p4","平常吃的藥多帶 2～3 天份"],
       ["p5","打給銀行確認卡片能在國外刷"],
       ["p6","印出緊急聯絡頁和飯店地址卡"]
@@ -578,9 +580,9 @@
     {g:"到了峇里島", items:[
       ["b1","機場換 US$300，請櫃台給綠色和藍色小鈔"],
       ["b2","爸媽各分 IDR 50 萬、姐姐 IDR 100 萬"],
-      ["b3","入住時問：電梯、保險箱放不放得下筆電"],
-      ["b4","10/30 前一天確認 Menega Cafe 訂位"],
-      ["b5","10/31 浮潛前一天看海況"]
+      ["b4","Menega Cafe 訂位有沒有變動"],
+      ["b5","10/31 浮潛前一天看海況"],
+      ["b6","11/1 09:30 退房、行李寄放行李櫃台"]
     ]}
   ];
   var KEY = "bali-trip-todo-v1", saved = {};
